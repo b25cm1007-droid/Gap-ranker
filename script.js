@@ -151,16 +151,23 @@ window.showLeaderboard = async function () {
 
     const querySnapshot = await getDocs(collection(db, "users"));
 
-    let html = "<h3>Leaderboard</h3>";
+    let users = [];
 
     querySnapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        html += `<p>${data.name} - FEI: ${data.fei}</p>`;
+        users.push(docSnap.data());
+    });
+
+    // Sort highest FEI first
+    users.sort((a, b) => b.fei - a.fei);
+
+    let html = "<h3>Leaderboard</h3>";
+
+    users.forEach(user => {
+        html += `<p>${user.name} - FEI: ${user.fei}</p>`;
     });
 
     document.getElementById("leaderboard").innerHTML = html;
 };
-
 
 // ===============================
 // 📊 SHOW MY STATS
@@ -235,4 +242,40 @@ window.resetMyData = async function () {
     );
 
     alert("Data Reset Successfully");
+};
+// ===============================
+// 📅 FULL DAY GAP CALCULATOR
+// ===============================
+
+window.calculateFullDayGaps = function () {
+
+    const times = [];
+
+    for (let i = 1; i <= 5; i++) {
+        const start = document.getElementById(`c${i}_start`).value;
+        const end = document.getElementById(`c${i}_end`).value;
+
+        if (start && end) {
+            times.push({
+                start: new Date("1970-01-01T" + start + ":00"),
+                end: new Date("1970-01-01T" + end + ":00")
+            });
+        }
+    }
+
+    if (times.length < 2) {
+        document.getElementById("gapResult").innerText =
+            "Enter at least 2 classes.";
+        return;
+    }
+
+    let totalGap = 0;
+
+    for (let i = 0; i < times.length - 1; i++) {
+        let gap = (times[i + 1].start - times[i].end) / (1000 * 60);
+        if (gap > 0) totalGap += gap;
+    }
+
+    document.getElementById("gapResult").innerText =
+        "Total Gap Time: " + totalGap + " minutes";
 };
