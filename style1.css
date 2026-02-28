@@ -1,0 +1,84 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: white;
+    text-align: center;
+}
+
+.container {
+    margin-top: 60px;
+}
+
+h2 {
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 2px;
+    color: #00f5ff;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+    margin: 40px auto;
+    width: 60%;
+}
+
+.input-group {
+    margin: 15px;
+}
+
+input {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    backdrop-filter: blur(10px);
+    outline: none;
+}
+
+input:focus {
+    border: 1px solid #00f5ff;
+    box-shadow: 0 0 8px #00f5ff;
+}
+
+button {
+    padding: 12px 20px;
+    margin: 10px;
+    border-radius: 25px;
+    border: none;
+    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(45deg, #00f5ff, #00ff88);
+    color: black;
+}
+
+button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 20px #00f5ff;
+}
+
+#gapResult, #timer {
+    font-size: 22px;
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+#warning {
+    margin-top: 10px;
+    color: #ff4d4d;
+    font-weight: bold;
+    text-shadow: 0 0 10px red;
+}
+
+#fei {
+    margin-top: 15px;
+    font-size: 24px;
+    font-family: 'Orbitron', sans-serif;
+    color: #00ff88;
+    text-shadow: 0 0 15px #00ff88;
+}
