@@ -1,224 +1,179 @@
-# IITJ Break Time Quiz Battle — Backend
+Perfect ✅
+All files received.
 
-A real-time quiz battle platform for IIT Jodhpur students to make the most of their 2-hour breaks.
-
-## Features
-- 📅 **Timetable-based break detection** with mobile push notifications
-- ⚔️ **Branch vs Branch / Year vs Year quiz battles** (30–45 min sessions)
-- ❓ **Auto-generated questions** from Open Trivia DB (no API key needed)
-- 🔒 **Anti-cheat system** — 3 tab switches = disqualification
-- 🏆 **Live leaderboard** by user, branch, and year
+Now I’ll generate your **FINAL PROPER README.md** based on your complete project structure and functionality.
 
 ---
 
-## Tech Stack
-- **Runtime:** Node.js + Express
-- **Database:** MongoDB (Mongoose)
-- **Real-time:** Socket.io
-- **Auth:** JWT
-- **Questions:** Open Trivia DB (free)
-- **Push Notifications:** Web Push API (VAPID)
-- **Scheduling:** node-cron
+# 🚀 GAP RANKERS
+
+Gap Rankers is a web-based productivity and focus tracking system designed to help students utilize their class gap time effectively. It combines Focus Sprint sessions, FEI (Focus Efficiency Index) calculation, Firebase authentication, leaderboard tracking, and quiz modules into one interactive browser application.
 
 ---
 
-## Setup
+## 🌟 Project Overview
 
-### 1. Install dependencies
-```bash
-npm install
-```
+Gap Rankers helps students:
 
-### 2. Configure environment
-```bash
-cp .env.example .env
-# Edit .env with your values
-```
+* Track free gap time between classes
+* Perform focus sessions during gaps
+* Calculate Focus Efficiency Index (FEI)
+* Store user data using Firebase
+* Compete via leaderboard
+* Practice quizzes (Languages, DSA, Semester)
+* Improve concentration with tab-switch detection
 
-### 3. Generate VAPID keys (for push notifications)
-```bash
-npx web-push generate-vapid-keys
-# Paste the keys into your .env file
-```
-
-### 4. Start MongoDB
-```bash
-mongod --dbpath /data/db
-```
-
-### 5. Run server
-```bash
-npm run dev   # development (nodemon)
-npm start     # production
-```
+This is a complete browser-based system (no app required).
 
 ---
 
-## API Reference
+## 📂 Project Structure
 
-### Auth
-| Method | Route | Description |
-|--------|-------|-------------|
-| POST | `/api/auth/register` | Register new user |
-| POST | `/api/auth/login` | Login, get JWT |
-| GET  | `/api/auth/me` | Get own profile |
-| PUT  | `/api/auth/preferences` | Update topics/difficulty |
+1(15).html → AI-based Focus Arena Quiz
+index.html → Main Dashboard (Profile + Sprint + Leaderboard)
+index1.html → Gap & FEI Calculator
+option.html → Quiz Category Selection
+option.css → Styling for Quiz Selection
+option.js → Quiz Logic
+script.js → Firebase + Leaderboard + Sprint Logic
+script1.js → Gap + FEI + Tab Detection
+style.css → Main Dashboard Styling
+style1.css → Gap Calculator Styling
 
-**Register body:**
-```json
+---
+
+## 🔥 Features
+
+### 👤 User Profile
+
+* Google Login Authentication
+* Save Profile to Firebase Firestore
+* User data stored with FEI and session history
+
+### ⏱ Focus Sprint
+
+* 1-minute demo sprint
+* Accuracy generation
+* FEI calculation
+* Data saved to Firestore
+* Session history tracking
+
+### 🏆 Leaderboard
+
+* Displays all users with FEI
+* Session history
+* Personal stats
+* Reset data option
+
+### 📊 Gap Time Calculator
+
+* Calculates free time between classes
+* Tracks focus session during gap
+* Calculates FEI %
+* Tab switch detection warning
+
+### 🧠 Quiz System
+
+* Computer Languages quiz
+* Semester quiz
+* DSA external resource link
+* AI-generated quiz (Gemini API in 1(15).html)
+
+---
+
+## 🛠 Technologies Used
+
+* HTML5
+* CSS3
+* JavaScript (ES6 Modules)
+* Firebase Authentication
+* Firebase Firestore Database
+* Google Login Provider
+* Open Trivia API
+* Gemini AI API (experimental)
+
+---
+
+## ⚙ How To Run The Project
+
+### Step 1:
+
+Download or Clone the repository
+
+### Step 2:
+
+Open the project folder
+
+### Step 3:
+
+Open index.html in browser
+
+⚠ Important:
+Because Firebase modules are used, it is recommended to run using Live Server in VS Code.
+
+Right click → Open with Live Server
+
+---
+
+## 🔐 Firebase Setup (Already Configured)
+
+Firebase includes:
+
+* Authentication
+* Firestore Database
+* User Collection Storage
+
+Users collection stores:
 {
-  "name": "Rahul Kumar",
-  "email": "b22cs001@iitj.ac.in",
-  "password": "secret123",
-  "branch": "CSE",
-  "year": 2
+name,
+fei,
+sessions[],
+createdAt
 }
-```
 
 ---
 
-### Timetable
-| Method | Route | Description |
-|--------|-------|-------------|
-| PUT | `/api/timetable` | Save weekly timetable |
-| GET | `/api/timetable` | Get timetable + all breaks |
-| GET | `/api/timetable/breaks/today` | Breaks for today |
+## 📈 FEI Formula
 
-**Timetable body:**
-```json
-{
-  "slots": [
-    { "day": "Monday", "startTime": "09:00", "endTime": "10:00", "subject": "Maths" },
-    { "day": "Monday", "startTime": "12:00", "endTime": "13:00", "subject": "Physics" }
-  ]
-}
-```
-A break is detected between 10:00–12:00 (120 min).
+FEI = (Focused Minutes / Gap Minutes) × 100
+
+Higher FEI = Better Focus Efficiency
 
 ---
 
-### Quiz
-| Method | Route | Description |
-|--------|-------|-------------|
-| GET  | `/api/quiz/topics` | List available topics |
-| POST | `/api/quiz/create` | Create a quiz room |
-| POST | `/api/quiz/join/:roomId` | Join an existing room |
-| GET  | `/api/quiz/session/:roomId` | Get session details |
-| GET  | `/api/quiz/active` | List active/waiting rooms |
+## 🚨 Special Focus Features
 
-**Create quiz body:**
-```json
-{
-  "topic": "Computers",
-  "difficulty": "medium",
-  "durationMinutes": 35,
-  "battleType": "branch_vs_branch"
-}
-```
+* Tab switch detection
+* Idle detection (in AI Focus Arena)
+* Distraction termination
+* XP & Level system in quiz mode
 
 ---
 
-### Leaderboard
-| Method | Route | Description |
-|--------|-------|-------------|
-| GET | `/api/leaderboard/users` | Individual rankings (filter by branch, year) |
-| GET | `/api/leaderboard/branches` | Branch vs Branch rankings |
-| GET | `/api/leaderboard/years` | Year vs Year rankings |
-| GET | `/api/leaderboard/me` | My rank + stats |
+## 🎯 Future Improvements
+
+* Real-time leaderboard sorting
+* Proper accuracy tracking system
+* AI-generated adaptive quiz difficulty
+* MongoDB + Node backend integration
+* Performance analytics dashboard
 
 ---
 
-### Push Notifications
-| Method | Route | Description |
-|--------|-------|-------------|
-| GET    | `/api/notifications/vapid-public-key` | Get VAPID public key |
-| POST   | `/api/notifications/subscribe` | Save push subscription |
-| DELETE | `/api/notifications/subscribe` | Remove push subscription |
+## 👩‍💻 Developed By
+
+Project Name: Gap Rankers
 
 ---
 
-## Socket.io Events
-
-### Client → Server
-| Event | Payload | Description |
-|-------|---------|-------------|
-| `join_room` | `{ roomId }` | Join quiz room |
-| `start_quiz` | `{ roomId }` | Host starts quiz (≥2 players) |
-| `submit_answer` | `{ roomId, questionIndex, selectedAnswer, timeSpent }` | Submit answer |
-| `tab_switch` | `{ roomId }` | Report tab visibility change (anti-cheat) |
-
-### Server → Client
-| Event | Payload | Description |
-|-------|---------|-------------|
-| `participant_joined` | `{ participants }` | Someone joined lobby |
-| `quiz_started` | `{ questions, durationMinutes }` | Quiz begins (questions without answers) |
-| `answer_result` | `{ correct, correctAnswer, pointsEarned, totalScore }` | Result for submitted answer |
-| `score_update` | `{ scores }` | Live scores for all players |
-| `tab_switch_warning` | `{ count, remaining, message }` | Warning (1st, 2nd switch) |
-| `disqualified` | `{ message }` | User disqualified (3rd switch) |
-| `participant_disqualified` | `{ name }` | Broadcast to room |
-| `quiz_ended` | `{ winner, leaderboard, disqualified }` | Final results |
+🔥 Built for Hackathon Productivity Enhancement
+Focus. Compete. Improve.
 
 ---
 
-## Anti-Cheat System
+If you want, I can now:
 
-The frontend must emit `tab_switch` whenever:
-- `document.addEventListener('visibilitychange', ...)` detects hidden state
-- Window blur event fires
-
-```javascript
-// Frontend implementation
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden && quizActive) {
-    socket.emit('tab_switch', { roomId });
-  }
-});
-
-window.addEventListener('blur', () => {
-  if (quizActive) {
-    socket.emit('tab_switch', { roomId });
-  }
-});
-```
-
-- **1st switch:** Warning shown
-- **2nd switch:** Final warning  
-- **3rd switch:** Immediate disqualification, session ends for that user
-
----
-
-## Scoring
-- Correct answer: **100 points**
-- Speed bonus: up to **+50 points** (decreases by 1 every 2 seconds)
-- Wrong answer: **0 points**
-- Leaderboard ranks by total cumulative score across all sessions
-
----
-
-## Project Structure
-```
-iitj-quiz-backend/
-├── server.js              # Entry point
-├── config/
-│   └── db.js              # MongoDB connection
-├── models/
-│   ├── User.js            # User + timetable + stats
-│   ├── QuizSession.js     # Quiz room + questions + participants
-│   └── Leaderboard.js     # Individual + branch leaderboard
-├── routes/
-│   ├── auth.js            # Register, login, profile
-│   ├── timetable.js       # Save/get timetable, detect breaks
-│   ├── quiz.js            # Create/join rooms
-│   ├── leaderboard.js     # Rankings
-│   └── notification.js    # Push subscription
-├── middleware/
-│   └── auth.js            # JWT verification
-├── services/
-│   ├── triviaService.js   # Open Trivia DB integration
-│   ├── quizSocket.js      # Socket.io real-time engine + anti-cheat
-│   ├── breakDetector.js   # Detects breaks in timetable
-│   ├── breakScheduler.js  # Cron: sends push notifications at break time
-│   └── leaderboardService.js # Updates leaderboard after quiz
-└── .env.example
-```
+* Fix bugs in your code 🔧
+* Make leaderboard sort by highest FEI 📊
+* Improve README to professional GitHub standard 🌟
+* Or prepare final submission description for hackathon 🚀
