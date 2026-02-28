@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gap Rankers</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>GAP RANKERS</h1>
+
+    <!-- USER INFO -->
+    <div class="card">
+        <h2>User Profile</h2>
+        <input type="text" id="name" placeholder="Enter Name">
+        <input type="text" id="branch" placeholder="Enter Branch">
+        <input type="number" id="year" placeholder="Enter Year">
+        <button onclick="saveUser()">Save Profile</button>
+        <button onclick="googleLogin()">Login with Google</button>
+
+    </div>
+
+    <!-- TIMETABLE INPUT -->
+    <div class="card">
+    <h2>Full Day Timetable (8AM - 6PM)</h2>
+
+    <div class="class-row">
+        <input type="time" id="c1_start">
+        <span>-</span>
+        <input type="time" id="c1_end">
+    </div>
+
+    <div class="class-row">
+        <input type="time" id="c2_start">
+        <span>-</span>
+        <input type="time" id="c2_end">
+    </div>
+
+    <div class="class-row">
+        <input type="time" id="c3_start">
+        <span>-</span>
+        <input type="time" id="c3_end">
+    </div>
+
+    <div class="class-row">
+        <input type="time" id="c4_start">
+        <span>-</span>
+        <input type="time" id="c4_end">
+    </div>
+
+    <div class="class-row">
+        <input type="time" id="c5_start">
+        <span>-</span>
+        <input type="time" id="c5_end">
+    </div>
+
+    <button onclick="calculateFullDayGaps()">Calculate Gaps</button>
+
+    <div id="gapResult"></div>
+</div>
+
+    <!-- FOCUS SPRINT -->
+   <!-- FOCUS SPRINT -->
+<div class="card">
+    <h2>Focus Sprint</h2>
+
+    <button onclick="startSprint()">Start 1 Min Demo Sprint</button>
+
+    <p>Time Left: <span id="timeLeft">0</span> sec</p>
+    <p>Accuracy: <span id="accuracy">0</span>%</p>
+    <p>FEI: <span id="fei">0</span></p>
+</div>
+
+    <!-- LEADERBOARD -->
+    <div class="card">
+        <h2>Leaderboard</h2>
+        <button onclick="showLeaderboard()">Show Leaderboard</button>
+        <button onclick="showSessionHistory()">Show Session History</button>
+        <button onclick="showMyStats()">Show My Stats</button>
+        <button onclick="resetMyData()">Reset My Data</button>
+        
+
+        <div id="leaderboard"></div>
+    </div>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
