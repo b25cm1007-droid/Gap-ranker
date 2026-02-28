@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GapRank - Focus Arena</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0a0f1c, #09101c);
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+          padding: 40px;
+        }
+
+        h1 {
+            color: #f8f538;
+            margin-bottom: 5px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: #050b16;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.4);
+        }
+
+        #timer {
+            font-size: 40px;
+            color: #fa1515;
+            margin: 20px;
+        }
+
+        .energy-bar {
+            width: 300px;
+            height: 20px;
+            background: #334155;
+            border-radius: 10px;
+            margin: 10px auto;
+            overflow: hidden;
+        }
+
+        .energy-fill {
+            height: 100%;
+            width: 100%;
+            background: #22c55e;
+            transition: width 1s linear;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #eff838;
+            cursor: pointer;
+            margin-top: 20px;  
+        }
+
+        button:hover {
+            background-color: #0ea5e9;
+        }
+
+        .question-box {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="topicPage" class="container">
+    <h2>Select a Topic</h2>
+
+    <select id="topicSelect">
+        <option value="dsa">Data Structures</option>
+        <option value="c">C Programming</option>
+        <option value="debug">Debugging</option>
+    </select>
+
+    <button onclick="startQuiz()">Start Quiz</button>
+   
+</div>
+
+
+<div id="quizPage" class="container" style="display:none;">
+    <h2 id="quizTitle"></h2>
+    <p id="question"></p>
+
+    <input type="text" id="answer" placeholder="Type your answer">
+    <button onclick="submitAnswer()">Submit</button>
+
+    <p>XP: <span id="xp">0</span></p>
+    <p>Streak: <span id="streak">0</span></p>
+    <p>Time Left: <span id="timer">1800</span>s</p>
+</div>
+
+
+
+<script>
+    let violationCount = 0;
+    let maxViolations = 3;
+
+let timeLeft = 1800; // 30 minutes
+let interval;
+let xp = 0;
+let level = 1;
+let streak = 0;
+
+let lastActivityTime = Date.now();
+let idleWarningCount = 0;
+let maxIdleWarnings = 3;
+let idleLimit = 60000; // 60 seconds
+
+let filteredQuestions = [];
+let currentIndex = 0;
+
+
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+
+
+  
+
+   
+   async function startQuiz() {
+
+    let selectedTopic = document.getElementById("topicSelect").value;
+
+    xp = 0;
+    streak = 0;
+    timeLeft = 1800;
+
+    document.getElementById("xp").innerText = xp;
+    document.getElementById("streak").innerText = streak;
+    document.getElementById("timer").innerText = timeLeft;
+
+    document.getElementById("topicPage").style.display = "none";
+    document.getElementById("quizPage").style.display = "block";
+    document.getElementById("quizTitle").innerText =
+        selectedTopic.toUpperCase() + " Quiz";
+
+    await fetchQuestionsFromAI(selectedTopic);
+
+    if (filteredQuestions.length > 0) {
+        loadQuestion();
+        interval = setInterval(updateTimer, 1000);
+    } else {
+        document.getElementById("question").innerText =
+            "Failed to load questions.";
+    }
+}
+
+
+
+async function fetchQuestionsFromAI(topic) {
+
+    try {
+
+        const response = await fetchQuestions(topic, difficulty);
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyCbDhs7xTCAqdFJ-m9j6i6xL_nHz2HNWbY",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: `Generate 15 short quiz questions with one-word answers about ${topic}.
+                            ONLY return valid JSON array like:
+                            [
+                              {"question":"...","answer":"..."}
+                            ]`
+                        }]
+                    }]
+                })
+            }
+
+        
+
+        const data = await response.json();
+
+        console.log("Gemini Response:", data);
+
+        if (!data.candidates) {
+            console.log("No candidates returned.");
+            return;
+        }
+
+        let textOutput = data.candidates[0].content.parts[0].text;
+
+        let jsonStart = textOutput.indexOf("[");
+        let jsonEnd = textOutput.lastIndexOf("]") + 1;
+
+        let cleanJson = textOutput.substring(jsonStart, jsonEnd);
+
+        filteredQuestions = JSON.parse(cleanJson);
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+
+
+
+
+
+function submitAnswer(selected) {
+
+    if (!questions || currentIndex >= questions.length) {
+        return;
+    }
+
+    const correct = questions[currentIndex].answer;
+
+    if (selected === correct) {
+        score++;
+        document.getElementById("result").innerText = "Correct!";
+    } else {
+        document.getElementById("result").innerText =
+            "Wrong! Correct answer: " + correct;
+    }
+}
+
+
+
+
+
+
+
+function updateGame() {
+    if (timeLeft <= 0) {
+        clearInterval(interval);
+        completeSession();
+        return;
+    }
+
+    function endSessionDueToViolation() {
+
+    clearInterval(interval);
+
+    document.getElementById("question").innerText =
+        "❌ Session Failed Due To Distraction!";
+
+    document.getElementById("energy").style.width = "0%";
+
+    alert("Session Terminated. Too many distractions.");
+}
+
+
+function shuffleArray(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+
+function checkIdle() {
+
+    let currentTime = Date.now();
+
+    if (currentTime - lastActivityTime > idleLimit) {
+
+        idleWarningCount++;
+
+        alert("⚠ You seem inactive! Stay engaged in battle!");
+
+        lastActivityTime = Date.now();
+
+        if (idleWarningCount >= maxIdleWarnings) {
+            endSessionDueToViolation();
+        }
+    }
+}
+
+
+
+document.addEventListener("mousemove", resetActivityTimer);
+document.addEventListener("keydown", resetActivityTimer);
+document.addEventListener("click", resetActivityTimer);
+
+function resetActivityTimer() {
+    lastActivityTime = Date.now();
+}
+
+
+    document.addEventListener("visibilitychange", function() {
+
+    if (document.visibilityState === "hidden") {
+
+        violationCount++;
+
+        alert("⚠ You switched tabs! Stay focused!");
+
+        if (violationCount >= maxViolations) {
+            endSessionDueToViolation();
+        }
+    }
+});
+
+
+
+    timeLeft--;
+
+    let minutes = Math.floor(timeLeft / 60);
+    let seconds = timeLeft % 60;
+
+    document.getElementById("timer").innerText =
+        (minutes < 10 ? "0" : "") + minutes + ":" +
+        (seconds < 10 ? "0" : "") + seconds;
+
+    // Reduce energy visually
+    let percent = (timeLeft / 300) * 100;
+    document.getElementById("energy").style.width = percent + "%";
+}
+
+
+
+function prepareQuestions() {
+
+    let selectedTopic = document.getElementById("topicSelect").value;
+
+    // Filter by topic
+    filteredQuestions = questionBank.filter(q => q.topic === selectedTopic);
+
+    // Separate by difficulty
+    let easy = shuffleArray(filteredQuestions.filter(q => q.difficulty === 1));
+    let medium = shuffleArray(filteredQuestions.filter(q => q.difficulty === 2));
+    let hard = shuffleArray(filteredQuestions.filter(q => q.difficulty === 3));
+    filteredQuestions = shuffleArray(filteredQuestions);
+
+    // Progressive order
+    filteredQuestions = [...easy, ...medium, ...hard];
+
+    currentIndex = 0;
+}
+
+
+
+function loadQuestion() {
+
+    // If time is over
+    if (timeLeft <= 0) {
+        document.getElementById("question").innerText = 
+            "⏰ Time's up! Session complete.";
+        return;
+    }
+
+    // If questions are finished, restart from beginning
+    if (filteredQuestions.length === 0) {
+    document.getElementById("question").innerText =
+        "No more questions available!";
+    return;
+}
+
+    let currentQuestion = filteredQuestions[currentIndex];
+
+    document.getElementById("question").innerText = 
+        `(${currentQuestion.difficulty === 1 ? "Easy" : 
+           currentQuestion.difficulty === 2 ? "Medium" : "Hard"}) 
+           ${currentQuestion.question}`;
+
+}
+
+
+
+async function fetchQuestions(topic) {
+
+    let url = `https://opentdb.com/api.php?amount=30&type=multiple`;
+
+    let response = await fetch(url);
+    let data = await response.json();
+
+    filteredQuestions = data.results.map(q => ({
+        question: q.question,
+        correct: q.correct_answer,
+        options: shuffleArray([...q.incorrect_answers, q.correct_answer])
+    }));
+
+    currentIndex = 0;
+    loadQuestion();
+}
+
+
+
+
+
+function completeSession() {
+    streak++;
+    xp += 50;
+
+    if (xp >= level * 100) {
+        xp = 0;
+        level++;
+        alert("LEVEL UP! You reached Level " + level + " 🔥");
+    }
+
+    document.getElementById("xp").innerText = xp;
+    document.getElementById("level").innerText = level;
+    document.getElementById("streak").innerText = streak;
+    document.getElementById("question").innerText =
+        "Battle Complete! XP Earned: +50";
+}
+
+</script>
+
+</body>
+</html>
