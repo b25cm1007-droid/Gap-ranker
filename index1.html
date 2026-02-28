@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gap Time & FEI Calculator</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <h2>Class Gap Time Calculator</h2>
+
+        <div class="input-group">
+            <label>Class 1 End Time:</label>
+            <input type="time" id="endTime">
+        </div>
+
+        <div class="input-group">
+            <label>Class 2 Start Time:</label>
+            <input type="time" id="startTime">
+        </div>
+
+        <button onclick="calculateGap()">Calculate Gap</button>
+
+        <h3 id="gapResult"></h3>
+
+        <hr>
+
+        <h2>Gaming / Focus Session</h2>
+
+        <button onclick="startSession()">Start Session</button>
+        <button onclick="endSession()">End Session</button>
+
+        <div id="timer"></div>
+        <div id="warning"></div>
+        <div id="fei"></div>
+
+    </div>
+
+    <!-- External JS -->
+    <script src="script.js"></script>
+
+</body>
+</html>
