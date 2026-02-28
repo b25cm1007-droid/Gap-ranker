@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Selection</title>
+  <link rel="stylesheet" href="option.css">
+</head>
+<body>
+  <h1>Select Your Quiz Category</h1>
+  <div class="options">
+    <!-- Computer Languages -->
+    <div class="card" onclick="startQuiz('languages')">
+      <h2>Computer Languages</h2>
+      <p>Test your knowledge of C, Java, Python, etc.</p>
+    </div>
+
+    <!-- DSA goes directly to Bing link -->
+    <a class="card" href="https://www.bing.com/ck/a?!&&p=821ee6c9a9b824d7332a24638a5c3bbe10279e5f91aae7a45811a1275e20b1a3JmltdHM9MTc3MjE1MDQwMA&ptn=3&ver=2&hsh=4&fclid=10a6a10f-62de-63bf-1f0b-b7dc63d562c5&psq=dsa+questions&u=a1aHR0cHM6Ly93d3cuZ2Vla3Nmb3JnZWVrcy5vcmcvZHNhL3RvcC0xMDAtZGF0YS1zdHJ1Y3R1cmUtYW5kLWFsZ29yaXRobXMtZHNhLWludGVydmlldy1xdWVzdGlvbnMtdG9waWMtd2lzZS8" target="_blank">
+      <h2>DSA</h2>
+      <p>Click here to explore DSA questions on Bing.</p>
+    </a>
+
+    <!-- Semester Questions -->
+    <div class="card" onclick="startQuiz('semester')">
+      <h2>Semester Questions</h2>
+      <p>Prepare for your exams with semester quizzes.</p>
+    </div>
+  </div>
+
+  <div id="quizContainer" class="hidden">
+    <h2 id="quizTitle"></h2>
+    <div id="questions"></div>
+  </div>
+
+  <script src="option.js"></script>
+</body>
+</html>
